@@ -11,8 +11,6 @@ function [board_state, placed] = place_piece(board_state, point, color)
     
     % I've commented out the majority of the code here to test my group capture.
     % The group capture appears to work (I've only run a handful of tests)
-    % For now, the player is allowed to perform suicide (a smart player would
-    % never do this anyway
     
     %if strcmpi(board_state(point(1),point(2)), 'n')
         placed = true;
@@ -35,8 +33,15 @@ function [board_state, placed] = place_piece(board_state, point, color)
         opponent = 'w';
     end
     
+    % check for suicide
+    if eval_piece(board_state, point, opponent, color, board_state .* 0)
+        % suicide
+        board_state(point(1), point(2)) = 'n';
+        placed = false;
+    end
+    
     capturedIndices = captured_pieces(board_state, color, opponent);
-    for i = 1:size(capturedIndices, 1)
+    parfor i = 1:size(capturedIndices, 1)
         captured = capturedIndices(i, :);
         board_state(captured(1), captured(2)) = 'n';
     end
