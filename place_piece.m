@@ -4,8 +4,8 @@
 % point should be defined as an array: [row column]
 % color should be 'b' or 'w'
 
-function [board_state, placed] = place_piece(board_state, point, color)
-    placed = false;
+function [board_state placed] = place_piece(board_state, point, color)
+    % placed = false;
     
     % point array 1 is y-value (row). 2 is x-value (column).
     
@@ -33,19 +33,24 @@ function [board_state, placed] = place_piece(board_state, point, color)
         opponent = 'w';
     end
     
-    % check for suicide
-    if eval_piece(board_state, point, opponent, color, board_state .* 0)
-        % suicide
-        board_state(point(1), point(2)) = 'n';
-        placed = false;
-    end
-    
+    % check to see if capturing
     capturedIndices = captured_pieces(board_state, color, opponent);
-    parfor i = 1:size(capturedIndices, 1)
-        captured = capturedIndices(i, :);
-        board_state(captured(1), captured(2)) = 'n';
-    end
     
+    if isempty(capturedIndices)
+        % check for suicide
+        scratch = board_state;
+        scratch(:) = '0';
+        if eval_piece(board_state, point, opponent, color, scratch)
+            % suicide
+            board_state(point(1), point(2)) = 'n';
+            placed = false;
+        end
+    else % not suicide, proceed as normal
+        parfor i = 1:size(capturedIndices, 1)
+            captured = capturedIndices(i, :);
+            board_state(captured(1), captured(2)) = 'n';
+        end
+    end    
 end
 
 function board_state = check_taken(board_state, group)
