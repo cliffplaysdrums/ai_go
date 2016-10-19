@@ -5,17 +5,18 @@
 % color should be 'b' or 'w'
 
 function [board_state placed] = place_piece(board_state, point, color)
-    % placed = false;
-    
     % point array 1 is y-value (row). 2 is x-value (column).
     
-    % I've commented out the majority of the code here to test my group capture.
-    % The group capture appears to work (I've only run a handful of tests)
-    
-    %if strcmpi(board_state(point(1),point(2)), 'n')
+    % I've commented out the majority of the code here to test my (Cliff's) 
+    % group capture. I'm not deleting it until we're sure we want to stick 
+    % with mine
+    %{
+    % placed = false;
+        
+    if strcmpi(board_state(point(1),point(2)), 'n')
         placed = true;
         board_state(point(1),point(2)) = color;
-     %{   
+        
         left = [point(1), point(2)-1];
         board_state = check_capture(board_state,left,color);
         right = [point(1), point(2)+1];
@@ -26,6 +27,9 @@ function [board_state placed] = place_piece(board_state, point, color)
         board_state = check_capture(board_state,bottom,color);
     end
     %}
+    
+    placed = true;
+    board_state(point(1),point(2)) = color;
     
     if strcmpi(color, 'w')
         opponent = 'b';
@@ -51,7 +55,4 @@ function [board_state placed] = place_piece(board_state, point, color)
             board_state(captured(1), captured(2)) = 'n';
         end
     end    
-end
-
-function board_state = check_taken(board_state, group)
 end
