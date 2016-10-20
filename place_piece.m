@@ -50,7 +50,7 @@ function [board_state placed] = place_piece(board_state, point, color)
             placed = false;
         end
     else % not suicide, proceed as normal
-        parfor i = 1:size(capturedIndices, 1)
+        for i = 1:size(capturedIndices, 1)
             captured = capturedIndices(i, :);
             board_state(captured(1), captured(2)) = 'n';
         end
