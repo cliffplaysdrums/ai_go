@@ -14,6 +14,23 @@ function board_state = new_game(size)
     b_taken_count = 0;
     w_taken_count = 0;
     
+    % will be used for move history to feed to the NN
+    EMPTY = 1;
+    BLACK = 2;
+    WHITE = 3;
+    boardStateUnrolled = ones(1, size*size);
+    
+    % matrix to feed through NN
+    % indices:
+    %   1: The move made. Represented as an integer from 1 to size*size or
+    %       0 to represent a pass. Odd rows will be black's moves. Even
+    %       rows will be white's moves.
+    %   2: Interpreted cost of move (not finalized until game ends)
+    %   3 to the end: the board state "unrolled" prior to the move
+    %       that was made
+    moveHistory = ones(1, size*size + 3);
+    moveNumber = 1;
+    
     while num_passes < 2
         query_string = sprintf('Enter move for %s (as #,#): ', color);
         move = input(query_string, 's');
@@ -22,6 +39,10 @@ function board_state = new_game(size)
         
         if strcmpi('pass',move)
             num_passes = num_passes + 1;
+            % set moveHistory data for NN
+            moveHistory(moveNumber, 1) = 0; % move made (pass)
+            moveHistory(moveNumber, 2) = 0; % cost (initially 0)
+            moveHistory(moveNumber, 3:end) = boardStateUnrolled;
         else
             prev_board_state = board_state;
             
@@ -32,7 +53,7 @@ function board_state = new_game(size)
             
             if strcmpi('b',color)
                 if ~isequal(moves,last_b_move)
-                    [board_state,placed] = ...
+                    [board_state, boardStateUnrolled, placed] = ...
                         place_piece(board_state,moves,color); 
                     num_passes = 0;
                     last_b_move = moves;
@@ -41,7 +62,7 @@ function board_state = new_game(size)
                 end
             else
                 if ~isequal(moves,last_w_move)
-                    [board_state,placed] = ...
+                    [board_state, boardStateUnrolled, placed] = ...
                         place_piece(board_state,moves,color); 
                     num_passes = 0;
                     last_w_move = moves;
