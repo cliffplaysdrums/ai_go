@@ -28,31 +28,34 @@ function [board_state placed] = place_piece(board_state, point, color)
     end
     %}
     
-    placed = true;
-    board_state(point(1),point(2)) = color;
-    
-    if strcmpi(color, 'w')
-        opponent = 'b';
-    else
-        opponent = 'w';
+    placed = false;
+    if strcmpi(board_state(point(1),point(2)), 'n')
+        placed = true;
+        board_state(point(1),point(2)) = color;
+
+        if strcmpi(color, 'w')
+            opponent = 'b';
+        else
+            opponent = 'w';
+        end
+
+        % check to see if capturing
+        capturedIndices = captured_pieces(board_state, color, opponent);
+
+        if isempty(capturedIndices)
+            % check for suicide
+            scratch = board_state;
+            scratch(:) = '0';
+            if eval_piece(board_state, point, opponent, color, scratch)
+                % suicide
+                board_state(point(1), point(2)) = 'n';
+                placed = false;
+            end
+        else % not suicide, proceed as normal
+            for i = 1:size(capturedIndices, 1)
+                captured = capturedIndices(i, :);
+                board_state(captured(1), captured(2)) = 'n';
+            end
+        end    
     end
-    
-    % check to see if capturing
-    capturedIndices = captured_pieces(board_state, color, opponent);
-    
-    if isempty(capturedIndices)
-        % check for suicide
-        scratch = board_state;
-        scratch(:) = '0';
-        if eval_piece(board_state, point, opponent, color, scratch)
-            % suicide
-            board_state(point(1), point(2)) = 'n';
-            placed = false;
-        end
-    else % not suicide, proceed as normal
-        for i = 1:size(capturedIndices, 1)
-            captured = capturedIndices(i, :);
-            board_state(captured(1), captured(2)) = 'n';
-        end
-    end    
 end
