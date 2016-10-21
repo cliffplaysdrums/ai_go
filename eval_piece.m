@@ -9,13 +9,18 @@ function captured = eval_piece(board_state, point, player, opponent, scratch)
     
 %TODO: skip 'safe'
 
+% print for error checking
+%disp(sprintf('EVALUATING (%d %d)', row, column));
+%disp('Scratch: ');
+%disp(scratch);
+
 if ~strcmpi(scratch(row, column), WORKING)   
     % check above
     if row > 1
         if ~strcmpi(board_state(row - 1, column), 'n')
-            if strcmpi(board_state(row - 1, column), opponent);
+            if strcmpi(board_state(row - 1, column), opponent)
                 scratch(row, column) = WORKING;
-                captured = eval_piece(board_state, [row - 1 column], player, ...
+                captured = eval_piece(board_state, [(row - 1) column], player, ...
                     opponent, scratch);
                 scratch(row, column) = '0';
             end
@@ -25,11 +30,11 @@ if ~strcmpi(scratch(row, column), WORKING)
     end
     
     % check below
-    if captured && (row < rows(board_state))
+    if captured && (row < size(board_state, 1))
         if ~strcmpi(board_state(row + 1, column), 'n')
             if strcmpi(board_state(row + 1, column), opponent)
                 scratch(row, column) = WORKING;
-                captured = eval_piece(board_state, [row + 1 column], player, ...
+                captured = eval_piece(board_state, [(row + 1) column], player, ...
                     opponent, scratch);
                 scratch(row, column) = '0';
             end
@@ -43,7 +48,7 @@ if ~strcmpi(scratch(row, column), WORKING)
         if ~strcmpi(board_state(row, column - 1), 'n')
             if strcmpi(board_state(row, column - 1), opponent)
                 scratch(row, column) = WORKING;
-                captured = eval_piece(board_state, [row column - 1], player, ...
+                captured = eval_piece(board_state, [row (column - 1)], player, ...
                     opponent, scratch);
                 scratch(row, column) = '0';
             end
@@ -53,13 +58,13 @@ if ~strcmpi(scratch(row, column), WORKING)
     end
     
     % check right
-    if captured && (column < columns(board_state))
+    if captured && (column < size(board_state, 2))
         if ~strcmpi(board_state(row, column + 1), 'n')
             if strcmpi(board_state(row, column + 1), opponent)
                 scratch(row, column) = WORKING;
-                captured = eval_piece(board_state, [row column + 1], player, ...
+                captured = eval_piece(board_state, [row (column + 1)], player, ...
                     opponent, scratch);
-                scratch(row, column) = 0;
+                scratch(row, column) = '0';
             end
         else
             captured = false;

@@ -1,7 +1,18 @@
-function [board_state, placed] = place_piece(board_state, point, color)
-    placed = false;
+% function [board_state, placed] =
+%     place_piece(board_state, point, color)
+%
+% point should be defined as an array: [row column]
+% color should be 'b' or 'w'
+
+function [board_state placed] = place_piece(board_state, point, color)
+    % point array 1 is y-value (row). 2 is x-value (column).
     
-    % point array 1 is y-value.  2 is x-value.
+    % I've commented out the majority of the code here to test my (Cliff's) 
+    % group capture. I'm not deleting it until we're sure we want to stick 
+    % with mine
+    %{
+    % placed = false;
+        
     if strcmpi(board_state(point(1),point(2)), 'n')
         placed = true;
         board_state(point(1),point(2)) = color;
@@ -15,7 +26,36 @@ function [board_state, placed] = place_piece(board_state, point, color)
         bottom = [point(1)+1, point(2)];
         board_state = check_capture(board_state,bottom,color);
     end
-end
+    %}
+    
+    placed = false;
+    if strcmpi(board_state(point(1),point(2)), 'n')
+        placed = true;
+        board_state(point(1),point(2)) = color;
 
-function board_state = check_taken(board_state, group)
+        if strcmpi(color, 'w')
+            opponent = 'b';
+        else
+            opponent = 'w';
+        end
+
+        % check to see if capturing
+        capturedIndices = captured_pieces(board_state, color, opponent);
+
+        if isempty(capturedIndices)
+            % check for suicide
+            scratch = board_state;
+            scratch(:) = '0';
+            if eval_piece(board_state, point, opponent, color, scratch)
+                % suicide
+                board_state(point(1), point(2)) = 'n';
+                placed = false;
+            end
+        else % not suicide, proceed as normal
+            for i = 1:size(capturedIndices, 1)
+                captured = capturedIndices(i, :);
+                board_state(captured(1), captured(2)) = 'n';
+            end
+        end    
+    end
 end
