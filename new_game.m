@@ -4,7 +4,13 @@
 %
 %TODO: since this is now automated, we can probably remove the return value
 %global move1;
-function board_state = new_game(size)
+function board_state = new_game
+
+    prompt = {'Please enter the size for the GO game:'};
+    dlg_title = 'Input';
+    num_lines = 1;
+    size_var = inputdlg(prompt,dlg_title,num_lines);
+    size=str2num(size_var{1});
 
     size=size+1;    %ruby code
     board_state(1:size,1:size) = 'n';
