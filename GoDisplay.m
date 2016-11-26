@@ -1,6 +1,6 @@
 function [xcoord,ycoord,move1]=GoDisplay(size,board_state,first_move)
-rows=size-1;
-cols=size-1;
+rows=size;
+cols=size;
 global move1;
 
 
@@ -13,7 +13,7 @@ display.figHandle = figure('Name','AIGo','NumberTitle','off');
 set(display.figHandle,'Color',[.9 .8 .5]);
 
 ax = axes('color','none', ...
-    'xlim',[0 cols]+[0 0],'ylim',[0 rows]+[0.05 0],...    
+    'xlim',[1 cols]+[0 0],'ylim',[1 rows]+[0.05 0],...    
     'xtick',[],'ytick',[],...
     'NextPlot','add',...
     'Layer','bottom',...
@@ -70,17 +70,17 @@ h_new_game = uicontrol('Style', 'pushbutton', ...
     'Callback','web mailto:rubygogri@gmail.com'); 
 
 if first_move>0
-    for i=1:rows+1
-        for j=1:cols+1
+    for i=1:rows
+        for j=1:cols
         % board_state(i,j)
         % grid = 'on'
         % plot(0, 0, '.r', 'MarkerSize',69)
             if board_state(i,j)=='b'
                 %plot black coin(s)
-                plot(i, j, '.black', 'MarkerSize',69)
+                plot(j, size+1-i, '.black', 'MarkerSize',69)
             elseif board_state(i,j)=='w'
                 %plot white coin(s)
-                plot(i, j, '.white', 'MarkerSize',69)
+                plot(j, size+1-i, '.white', 'MarkerSize',69)
             end 
         end
     end

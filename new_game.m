@@ -6,7 +6,7 @@
 %global move1;
 
 function board_state = new_game(size)
-    size=size+1;    %ruby code
+    %size=size+1;    %ruby code
     board_state(1:size,1:size) = 'n';
     prev_board_state = board_state;
     num_passes = 0;
@@ -17,9 +17,10 @@ function board_state = new_game(size)
     w_taken_count = 0;
     [xcoord,ycoord,move]= GoDisplay(size,board_state,0); %ruby code
     
+    % game loop
     while num_passes < 2
-        query_string = sprintf('Enter move for %s (as #,#): ', color);
-        move = input(query_string, 's');
+        %query_string = sprintf('Enter move for %s (as #,#): ', color);
+        %move = input(query_string, 's');
         
         placed = true;
         
@@ -28,10 +29,12 @@ function board_state = new_game(size)
         else
             prev_board_state = board_state;
             
-            moves = strsplit(move, ',');
-            moves = [...
-                str2num(cell2mat(moves(1))),...
-                str2num(cell2mat(moves(2)))];
+            %moves = strsplit(move, ',');
+%             moves = [...
+%                 str2num(cell2mat(moves(1))),...
+%                 str2num(cell2mat(moves(2)))];
+
+            moves = [size+1-ycoord, xcoord];
             
             if strcmpi('b',color)
                 if ~isequal(moves,last_b_move)
