@@ -7,10 +7,23 @@
 function board_state = new_game
 
     prompt = {'Please enter the size for the GO game:'};
-    dlg_title = 'Input';
-    num_lines = 1;
-    size_var = inputdlg(prompt,dlg_title,num_lines);
-    size=str2num(size_var{1});
+    while 1
+        dlg_title = 'Input';
+        num_lines = 1;
+        size_var = inputdlg(prompt,dlg_title,num_lines);
+        size=str2num(size_var{1});
+
+        if (isempty(size_var{1})==1)
+             prompt={'Size cannot be left empty, please enter the size:'}; 
+
+        %Valid numeric value needs to be entered
+
+        elseif ~isempty(size)
+             break
+        else
+             prompt = {'Please enter numeric GO size:'};
+        end
+    end
 
     size=size+1;    %ruby code
     board_state(1:size,1:size) = 'n';
