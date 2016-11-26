@@ -4,9 +4,9 @@
 %
 %TODO: since this is now automated, we can probably remove the return value
 %global move1;
-
 function board_state = new_game(size)
-    %size=size+1;    %ruby code
+
+    size=size+1;    %ruby code
     board_state(1:size,1:size) = 'n';
     prev_board_state = board_state;
     num_passes = 0;
@@ -16,11 +16,11 @@ function board_state = new_game(size)
     b_taken_count = 0;
     w_taken_count = 0;
     [xcoord,ycoord,move]= GoDisplay(size,board_state,0); %ruby code
+    %disp(move);
     
-    % game loop
     while num_passes < 2
-        %query_string = sprintf('Enter move for %s (as #,#): ', color);
-        %move = input(query_string, 's');
+        query_string = sprintf('Enter move for %s (as #,#): ', color);
+        move = input(query_string, 's');
         
         placed = true;
         
@@ -29,12 +29,10 @@ function board_state = new_game(size)
         else
             prev_board_state = board_state;
             
-            %moves = strsplit(move, ',');
-%             moves = [...
-%                 str2num(cell2mat(moves(1))),...
-%                 str2num(cell2mat(moves(2)))];
-
-            moves = [size+1-ycoord, xcoord];
+            moves = strsplit(move, ',');
+            moves = [...
+                str2num(cell2mat(moves(1))),...
+                str2num(cell2mat(moves(2)))];
             
             if strcmpi('b',color)
                 if ~isequal(moves,last_b_move)
@@ -83,11 +81,12 @@ function board_state = new_game(size)
             disp(w_taken_count);
         else
             disp('Problem placing piece.  Try again.');
-            close(gcf); %ruby code
+            %close(gcf); %ruby code
             [xcoord,ycoord,move]= GoDisplay(size,board_state,1); %ruby code
         end
     end
     disp('Game has ended.');
     close(gcf); %ruby code
-    [xcoord,ycoord,move]= GoDisplay(size,board_state,2); %ruby code
+   % [xcoord,ycoord,move]= GoDisplay(size,board_state,2); %ruby code
+    Go_score(board_state,size);
 end

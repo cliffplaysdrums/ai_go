@@ -1,8 +1,7 @@
 function [xcoord,ycoord,move1]=GoDisplay(size,board_state,first_move)
-rows=size;
-cols=size;
+rows=size-1;
+cols=size-1;
 global move1;
-
 
 ssPos = get(0,'ScreenSize');
 fs = [ssPos(3:4)/4 ssPos(3:4)/2]; %centre & quater of a screen
@@ -13,7 +12,7 @@ display.figHandle = figure('Name','AIGo','NumberTitle','off');
 set(display.figHandle,'Color',[.9 .8 .5]);
 
 ax = axes('color','none', ...
-    'xlim',[1 cols]+[0 0],'ylim',[1 rows]+[0.05 0],...    
+    'xlim',[0 cols]+[0 0],'ylim',[0 rows]+[0.05 0],...    
     'xtick',[],'ytick',[],...
     'NextPlot','add',...
     'Layer','bottom',...
@@ -57,7 +56,8 @@ h_new_game = uicontrol('Style', 'pushbutton', ...
     'FontName','Comic',...
     'FontUnits','normalized',...
     'FontSize',fontSize,...
-    'Callback','pass'); 
+    'Callback',@pass); 
+disp(move1);
 
 h_new_game = uicontrol('Style', 'pushbutton', ...
     'String','Feedback',...
@@ -70,27 +70,42 @@ h_new_game = uicontrol('Style', 'pushbutton', ...
     'Callback','web mailto:rubygogri@gmail.com'); 
 
 if first_move>0
-    for i=1:rows
-        for j=1:cols
+    for i=1:rows+1
+        for j=1:cols+1
         % board_state(i,j)
         % grid = 'on'
         % plot(0, 0, '.r', 'MarkerSize',69)
             if board_state(i,j)=='b'
-                %plot black coin(s)
-                plot(j, size+1-i, '.black', 'MarkerSize',69)
+     %    disp(sprintf('i:%d,j:%d,val-j:%d,val-i:%d',i,j,j-1,abs(size-i)));
+               %plot black coin(s)
+                plot(j-1,abs(size-i),'.black', 'MarkerSize',69);
+                plot(40,60,'.black', 'MarkerSize',169)
+                
             elseif board_state(i,j)=='w'
-                %plot white coin(s)
-                plot(j, size+1-i, '.white', 'MarkerSize',69)
+      %   disp(sprintf('i:%d,j:%d,val-j:%d,val-i:%d',i,j,j-1,abs(size-i)));
+               %plot white coin(s)
+                plot(j-1,abs(size-i),'.white', 'MarkerSize',69);
             end 
         end
     end
 end
 
 if first_move<2
-    [x,y] = ginput(1);
-    xcoord=round(x)
-    ycoord=round(y)
+    [x,y] = ginput(1)
+    if round(x)>0 & round(y)>0 
+        xcoord=abs(round(y)-rows)+1
+        ycoord=round(x)+1
+    end
+    if round(x)==0
+        xcoord=abs(round(y)-rows)+1
+        ycoord=1 
+    end
+    if round(y)==0
+        xcoord=6
+        ycoord=round(x)+1
+    end    
 end
+
 %if strcmpi('pass',move1)
 %    [x,y] = ginput(1);
 end
