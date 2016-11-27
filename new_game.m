@@ -34,24 +34,28 @@ function board_state = new_game
     last_w_move = [];
     b_taken_count = 0;
     w_taken_count = 0;
-    [xcoord,ycoord,move]= GoDisplay(size,board_state,0); %ruby code
+    %[xcoord,ycoord,move]= GoDisplay(size,board_state,0); %ruby code
     %disp(move);
     
     while num_passes < 2
-        query_string = sprintf('Enter move for %s (as #,#): ', color);
-        move = input(query_string, 's');
+        %query_string = sprintf('Enter move for %s (as #,#): ', color);
+        %move = input(query_string, 's');
         
         placed = true;
-        
+        [xcoord,ycoord,move]= GoDisplay(size,board_state,1);
         if strcmpi('pass',move)
             num_passes = num_passes + 1;
+            disp('Passed.');
+            continue;
         else
             prev_board_state = board_state;
             
-            moves = strsplit(move, ',');
-            moves = [...
-                str2num(cell2mat(moves(1))),...
-                str2num(cell2mat(moves(2)))];
+            moves = [xcoord, ycoord];
+            
+%             moves = strsplit(move, ',');
+%             moves = [...
+%                 str2num(cell2mat(moves(1))),...
+%                 str2num(cell2mat(moves(2)))];
             
             if strcmpi('b',color)
                 if ~isequal(moves,last_b_move)
@@ -77,7 +81,7 @@ function board_state = new_game
         if placed
             disp(board_state);
             close(gcf);     %ruby code
-           [xcoord,ycoord,move]= GoDisplay(size,board_state,1); %ruby code
+           %[xcoord,ycoord,move]= GoDisplay(size,board_state,1); %ruby code
             if strcmpi('b',color)
                 color = 'w';
             else
@@ -101,7 +105,7 @@ function board_state = new_game
         else
             disp('Problem placing piece.  Try again.');
             %close(gcf); %ruby code
-            [xcoord,ycoord,move]= GoDisplay(size,board_state,1); %ruby code
+            %[xcoord,ycoord,move]= GoDisplay(size,board_state,1); %ruby code
         end
     end
     disp('Game has ended.');
