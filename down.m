@@ -1,4 +1,12 @@
-
+%Description
+%This function is for score check. It checks the element on south of 
+%current Zero value
+%
+%Input: Board size and board state
+%
+%Output: Returns code for south value of matrix until either edge or a
+%non-zero value is reached
+%
 function [dval,d_index]=down(i,j,mat,n)
     k=i;
     d_index=-1;

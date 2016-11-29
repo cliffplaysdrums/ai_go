@@ -1,4 +1,12 @@
-
+%Description
+%This function is for score check. It checks the element on east of 
+%current Zero value
+%
+%Input: Board size and board state
+%
+%Output: Returns code for east value of matrix until either edge or a
+%non-zero value is reached
+%
 function [rval,r_index]=right(i,j,mat,n)
     k=j;
     r_index=-1;
