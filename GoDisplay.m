@@ -1,3 +1,14 @@
+%Description
+%This function creates the GUI for the game. It is interactive with the
+%players. 
+%
+%Input: Board size, board state and whether it is the first move
+%
+%Output: Creates GUI
+%        New game on press
+%        Pass on press 
+%        Send feedback
+%
 function [xcoord,ycoord,move1]=GoDisplay(size,board_state,first_move)
 rows=size-1;
 cols=size-1;
@@ -10,8 +21,8 @@ ssPos = get(0,'ScreenSize');
 fs = [ssPos(3:4)/4 ssPos(3:4)/2]; %centre & quater of a screen
 set(0, 'DefaultFigurePosition', fs);
 
+%Provides Game title
 display.figHandle = figure('Name','AIGo','NumberTitle','off'); 
-%set(display.figHandle,'Position',ssPos+100*[0 .5 -1 -1]);
 set(display.figHandle,'Color',[.9 .8 .5]);
 
 ax = axes('color','none', ...
@@ -33,6 +44,7 @@ for i = 1:cols
     end
 end
 
+%Display when the game ends
 title_disp=sprintf('%d X %d',rows,cols);
 if first_move==2
     title_disp='Game has ended!'
@@ -40,8 +52,8 @@ end
 labelFont='Comic'; labelFontSize=12;
 title(title_disp,'FontName',labelFont,'FontSize',labelFontSize);
 
-fontSize = .35;
 % New game - button
+fontSize = .35;
 h_new_game = uicontrol('Style', 'pushbutton', ...
     'String','New game',...
     'Unit','normalized',...
@@ -51,7 +63,7 @@ h_new_game = uicontrol('Style', 'pushbutton', ...
     'FontSize',fontSize,...
     'Callback','close(gcf); Go;'); 
 
-% Pass - button
+% Pass button
 h_new_game = uicontrol('Style', 'pushbutton', ...
     'String','Pass',...
     'Unit','normalized',...
@@ -62,9 +74,10 @@ h_new_game = uicontrol('Style', 'pushbutton', ...
     'Callback',@pass); 
 disp(move1);
 
+%Send feedback
 h_new_game = uicontrol('Style', 'pushbutton', ...
     'String','Feedback',...
-    'Tooltip','Send feedback to rubygogri@gmail.com',...
+    'Tooltip','Send feedback to rgogri1@student.gsu.edu',...
     'Unit','normalized',...
     'Position', [.018 .65 .14 .07],...
     'FontName','Comic',...
@@ -75,17 +88,12 @@ h_new_game = uicontrol('Style', 'pushbutton', ...
 if first_move>0
     for i=1:rows+1
         for j=1:cols+1
-        % board_state(i,j)
-        % grid = 'on'
-        % plot(0, 0, '.r', 'MarkerSize',69)
             if board_state(i,j)=='b'
-     %    disp(sprintf('i:%d,j:%d,val-j:%d,val-i:%d',i,j,j-1,abs(size-i)));
                %plot black coin(s)
                 plot(j-1,abs(size-i),'.black', 'MarkerSize',69);
                 plot(40,60,'.black', 'MarkerSize',169)
                 
             elseif board_state(i,j)=='w'
-      %   disp(sprintf('i:%d,j:%d,val-j:%d,val-i:%d',i,j,j-1,abs(size-i)));
                %plot white coin(s)
                 plot(j-1,abs(size-i),'.white', 'MarkerSize',69);
             end 
@@ -93,22 +101,22 @@ if first_move>0
     end
 end
 
-if first_move<2
-    [x,y] = ginput(1)
-    if round(x)>0 & round(y)>0 
-        xcoord=abs(round(y)-rows)+1
-        ycoord=round(x)+1
+%calculation to return xco-ordinate and yco-ordinate in matrix friendly
+%format since ginput returns co-ordinates in different format (bottom left
+%corner)
+    if first_move<2
+        [x,y] = ginput(1)
+        if round(x)>0 & round(y)>0 
+            xcoord=abs(round(y)-rows)+1
+            ycoord=round(x)+1
+        end
+        if round(x)==0
+            xcoord=abs(round(y)-rows)+1
+            ycoord=1 
+        end
+        if round(y)==0
+            xcoord=6
+            ycoord=round(x)+1
+        end    
     end
-    if round(x)==0
-        xcoord=abs(round(y)-rows)+1
-        ycoord=1 
-    end
-    if round(y)==0
-        xcoord=6
-        ycoord=round(x)+1
-    end    
-end
-
-%if strcmpi('pass',move1)
-%    [x,y] = ginput(1);
 end

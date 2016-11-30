@@ -1,4 +1,12 @@
-
+%Description
+%This function is for score check. It checks the element on north of 
+%current Zero value
+%
+%Input: Board size and board state
+%
+%Output: Returns code for north value of matrix until either edge or a
+%non-zero value is reached
+%
 function [tval,t_index]=top(i,j,mat)
     k=i;
     t_index=-1;

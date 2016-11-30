@@ -1,3 +1,12 @@
+%Description
+%This function is for score check. It checks the element on west of 
+%current Zero value
+%
+%Input: Board size and board state
+%
+%Output: Returns code for west value of matrix until either edge or a
+%non-zero value is reached
+%
 function [lval,l_index]=left(i,j,mat)
     k=j;
     l_index=-1;

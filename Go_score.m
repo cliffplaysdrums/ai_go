@@ -1,7 +1,21 @@
-
+%Description
+%This function generates the GO score at the end of the game.
+%The game can end when there are no possible moves or when the same user 
+%presses 'Pass' for two times.
+%
+%Input: Board state and board size
+%
+%Output: Generates individual score for both players and upon comparison
+%displays who Won the game
+%
+%Submodules: left(i,j,mat)
+%            right(i,j,mat,n)
+%            top(i,j,mat)
+%            down(i,j,mat,n)
+%
 function Go_score(capturedIndices,n)
 disp(capturedIndices);
-for rows=1:n
+for rows=1:n    %n represents the size
     for cols=1:n
         if strcmp(capturedIndices(rows,cols),'n')
             mat(rows,cols)=0;
@@ -38,8 +52,6 @@ while(runCount<=2)    %Run two times
              if ((tval==dval) & (dval==rval) & (rval==lval)) 
                  mat(i,j)=tval;
                  disp('Bingo');
-                 
-     %    elseif ((tval==dval) & (dval==rval) & (rval==lval) & (rval==-1)) 
      %###############################################            
      %HANDLE THIS CONDITION
      %########################################
@@ -139,7 +151,6 @@ while(runCount<=2)    %Run two times
     data=sprintf('%s\n%s\n\n%s',scoreBlack,scoreWhite,prompt)
     prompt={data};
     h = msgbox(prompt);
-    %h = msgbox(prompt,'Success','custom',myicon,map);
 
     set(h, 'position', [100 300 400 120]); %makes box bigger
     ah = get( h, 'CurrentAxes' );
