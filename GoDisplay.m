@@ -2,6 +2,9 @@ function [xcoord,ycoord,move1]=GoDisplay(size,board_state,first_move)
 rows=size-1;
 cols=size-1;
 global move1;
+% default values needed in case of pass
+xcoord = 1;
+ycoord = 1;
 
 ssPos = get(0,'ScreenSize');
 fs = [ssPos(3:4)/4 ssPos(3:4)/2]; %centre & quater of a screen
