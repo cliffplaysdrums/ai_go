@@ -45,7 +45,7 @@ for i = 1:cols
 end
 
 %Display when the game ends
-title_disp=sprintf('%d X %d',rows,cols);
+title_disp=sprintf('%d X %d',rows+1,cols+1);
 if first_move==2
     title_disp='Game has ended!'
 end    
